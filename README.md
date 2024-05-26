@@ -41,9 +41,21 @@ Provide adequate code documentation and build / run instructions.
 ![Screen9](https://github.com/kirinho/PragmasoftTechTask/blob/main/images/9.png?raw=true)  
 **get method to show script by id, script is completed**
 ---
-![Screen10](https://github.com/kirinho/PragmasoftTechTask/blob/main/images/MainControllerTest.png?raw=true)  
+![Screen10](https://github.com/kirinho/PragmasoftTechTask/blob/main/images/10.png?raw=true)  
+**tried to delete script that is currently running**
+---
+![Screen11](https://github.com/kirinho/PragmasoftTechTask/blob/main/images/11.png?raw=true)  
+**sorting by status "COMPLETED" and time**
+---
+![Screen12](https://github.com/kirinho/PragmasoftTechTask/blob/main/images/12.png?raw=true)  
+**sorting by status "EXECUTING"**
+---
+![Screen13](https://github.com/kirinho/PragmasoftTechTask/blob/main/images/13.png?raw=true)  
+**printing outputs**
+---
+![Screen14](https://github.com/kirinho/PragmasoftTechTask/blob/main/images/MainControllerTest.png?raw=true)  
 **Tests for MainController**
 ---
-![Screen11](https://github.com/kirinho/PragmasoftTechTask/blob/main/images/ScriptServiceTest.png?raw=true)  
+![Screen15](https://github.com/kirinho/PragmasoftTechTask/blob/main/images/ScriptServiceTest.png?raw=true)  
 **Tests for ScriptService**
 ---
