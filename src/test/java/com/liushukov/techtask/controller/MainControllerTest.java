@@ -1,6 +1,7 @@
 package com.liushukov.techtask.controller;
 
 import com.liushukov.techtask.dto.Script;
+import com.liushukov.techtask.dto.Status;
 import com.liushukov.techtask.service.ScriptService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,9 +32,9 @@ public class MainControllerTest {
 
     @BeforeEach
     void setUp() {
-        script1 = new Script("print('Hello, World!')", "queued", LocalDateTime.now());
+        script1 = new Script("print('Hello, World!')", Status.QUEUED, LocalDateTime.now());
         script1.setId(1);
-        script2 = new Script("print('Hello again!')", "completed", LocalDateTime.now());
+        script2 = new Script("print('Hello again!')", Status.COMPLETED, LocalDateTime.now());
         script2.setId(2);
     }
 
@@ -51,7 +52,7 @@ public class MainControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id", is(1)))
                 .andExpect(jsonPath("$.body", is("print('Hello, World!')")))
-                .andExpect(jsonPath("$.status", is("queued")));
+                .andExpect(jsonPath("$.status", is("QUEUED")));
     }
 
     @Test
@@ -63,9 +64,9 @@ public class MainControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id", is(1)))
-                .andExpect(jsonPath("$[0].status", is("queued")))
+                .andExpect(jsonPath("$[0].status", is("QUEUED")))
                 .andExpect(jsonPath("$[1].id", is(2)))
-                .andExpect(jsonPath("$[1].status", is("completed")));
+                .andExpect(jsonPath("$[1].status", is("COMPLETED")));
     }
 
     @Test
@@ -101,7 +102,7 @@ public class MainControllerTest {
 
         mockMvc.perform(post("/api/scripts/1/stop"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Script was finished"));
+                .andExpect(content().string("Script was already finished"));
     }
 
     @Test
@@ -119,6 +120,6 @@ public class MainControllerTest {
 
         mockMvc.perform(delete("/api/scripts/1"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("This script is already deleted"));
+                .andExpect(content().string("Can't delete the script for some reason (already deleted or currently running)"));
     }
 }

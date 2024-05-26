@@ -1,6 +1,7 @@
 package com.liushukov.techtask.controller;
 
 import com.liushukov.techtask.dto.Script;
+import com.liushukov.techtask.dto.Status;
 import org.springframework.web.bind.annotation.*;
 import com.liushukov.techtask.service.ScriptService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,12 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/scripts")
 public class MainController {
-    public static final String STATUS = "queued";
     @Autowired
     private ScriptService scriptService;
 
     @PostMapping("/execute")
-    public ResponseEntity<Script> executeScript(@RequestBody String scriptBody) {
-        Script script = new Script(scriptBody, STATUS, LocalDateTime.now());
+    public ResponseEntity<Script> createScript(@RequestBody String scriptBody) {
+        Script script = new Script(scriptBody, Status.QUEUED, LocalDateTime.now());
         scriptService.addScript(script);
         return ResponseEntity.ok(script);
     }
@@ -31,7 +31,10 @@ public class MainController {
         List<Script> scripts = new ArrayList<>(scriptService.getAllScripts());
 
         if (status != null) {
-            scripts = scripts.stream().filter(script -> script.getStatus().equals(status)).collect(Collectors.toList());
+            Status filterStatus = Status.valueOf(status.toUpperCase());
+            scripts = scripts.stream()
+                    .filter(script -> script.getStatus() == filterStatus)
+                    .collect(Collectors.toList());
         }
 
         if ("id".equalsIgnoreCase(sortBy)) {
@@ -45,22 +48,21 @@ public class MainController {
     @GetMapping("/{id}")
     public ResponseEntity<Script> getScript(@PathVariable int id) {
         Script script = scriptService.getScript(id);
-        if (script == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(script);
+        return (script != null) ? ResponseEntity.ok(script) : ResponseEntity.notFound().build();
     }
 
     @PostMapping("/{id}/stop")
     public ResponseEntity<String> stopScript(@PathVariable int id) {
         return (scriptService.stopScript(id))
                 ? ResponseEntity.ok("Script was stopped by id = " + id)
-                : ResponseEntity.ok("Script was finished");
+                : ResponseEntity.ok("Script was already finished");
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteScript(@PathVariable int id) {
-        return (scriptService.removeScript(id)) ? ResponseEntity.ok("Successfuly deleted script by id = " + id) :
-                ResponseEntity.ok("This script is already deleted");
+        return (scriptService.removeScript(id))
+                ? ResponseEntity.ok("Successfuly deleted script by id = " + id)
+                : ResponseEntity.ok("Can't delete the script for some reason (already deleted or " +
+                "currently running)");
     }
 }

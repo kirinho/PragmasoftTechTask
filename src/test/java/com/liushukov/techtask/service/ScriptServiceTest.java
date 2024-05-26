@@ -2,6 +2,7 @@ package com.liushukov.techtask.service;
 
 import com.liushukov.techtask.controller.MainController;
 import com.liushukov.techtask.dto.Script;
+import com.liushukov.techtask.dto.Status;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -31,8 +32,8 @@ public class ScriptServiceTest {
 
     @Test
     public void testGetAllScripts() {
-        Script script1 = new Script("script1", "queued", LocalDateTime.now());
-        Script script2 = new Script("script2", "running", LocalDateTime.now());
+        Script script1 = new Script("script1", Status.QUEUED, LocalDateTime.now());
+        Script script2 = new Script("script2", Status.EXECUTING, LocalDateTime.now());
         Collection<Script> scripts = Arrays.asList(script1, script2);
 
         when(scriptService.getAllScripts()).thenReturn(scripts);
@@ -47,7 +48,7 @@ public class ScriptServiceTest {
     @Test
     public void testGetScript() {
         int scriptId = 1;
-        Script script = new Script("script1", "queued", LocalDateTime.now());
+        Script script = new Script("script1", Status.QUEUED, LocalDateTime.now());
 
         when(scriptService.getScript(scriptId)).thenReturn(script);
 
